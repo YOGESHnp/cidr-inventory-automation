@@ -1,0 +1,6 @@
+VPC_Details/*.txt
+create_vpc_text_files.py
+*.csv
+*.html
+*.log
+.env
