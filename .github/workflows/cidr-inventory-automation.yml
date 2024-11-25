@@ -1,0 +1,59 @@
+name: CIDR Inventory Automation
+
+on:
+  push:
+    branches:
+      - master  # Trigger the workflow on pushing to the main branch
+
+jobs:
+  cidr_inventory_automation:
+    runs-on: ubuntu-latest  # Use Ubuntu for the workflow runner
+
+    steps:
+    # Step 1: Checkout the repository
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Step 2: Set up Python
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'  # Set your desired Python version
+
+    # Step 3: Install dependencies (assuming you have a requirements.txt with dependencies)
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt  # Ensure your Python dependencies are installed
+
+    # Step 4: Run dynamic-subnet-calc.py to create subnets.csv
+    - name: Run dynamic-subnet-calc.py to create subnets.csv
+      run: |
+        python VPC_details/dynamic-subnet-calc.py  # Adjust this if the script location is different
+
+    # Step 5: Clean up CSV file to create cleaned_subnets.csv
+    - name: Clean up CSV file
+      run: |
+        python clean_up_csv_file.py  # Adjust if needed, make sure it generates cleaned_subnets.csv
+
+    # Step 6: Convert cleaned CSV to HTML
+    - name: Convert CSV to HTML
+      run: |
+        python csv_to_html_converter.py  # Ensure this converts cleaned_subnets.csv to an HTML file
+
+    # Step 7: Save CSV and HTML as artifacts
+    - name: Upload CSV and HTML files as artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: cidr-inventory-files
+        path: |
+          cleaned_subnets.csv
+          subnets.html  # Assuming the HTML file is generated as 'subnets.html'
+
+    # Step 8: Upload the HTML to Confluence
+    - name: Upload HTML to Confluence
+      run: |
+        python upload_confluence.py  # Ensure this script uploads subnets.html to Confluence
+      env:
+        CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_API_TOKEN }}
+        CONFLUENCE_USERNAME: ${{ secrets.CONFLUENCE_USERNAME }}
