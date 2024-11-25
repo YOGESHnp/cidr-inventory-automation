@@ -29,28 +29,52 @@ jobs:
     # Step 4: Run dynamic-subnet-calc.py to create subnets.csv
     - name: Run dynamic-subnet-calc.py to create subnets.csv
       run: |
-        python VPC_details/dynamic-subnet-calc.py  # Adjust this if the script location is different
-
-    # Step 5: Clean up CSV file to create cleaned_subnets.csv
-    - name: Clean up CSV file
-      run: |
-        python clean_up_csv_file.py  # Adjust if needed, make sure it generates cleaned_subnets.csv
-
-    # Step 6: Convert cleaned CSV to HTML
-    - name: Convert CSV to HTML
-      run: |
-        python csv_to_html_converter.py  # Ensure this converts cleaned_subnets.csv to an HTML file
-
-    # Step 7: Save CSV and HTML as artifacts
-    - name: Upload CSV and HTML files as artifacts
+        python dynamic-subnet-calc.py  # Adjust this if the script location is different
+    
+    # Step 5: Upload subnets.csv as artifact
+    - name: Upload subnets.csv as artifact
       uses: actions/upload-artifact@v3
       with:
-        name: cidr-inventory-files
-        path: |
-          cleaned_subnets.csv
-          subnets.html  # Assuming the HTML file is generated as 'subnets.html'
+        name: subnets-csv
+        path: subnets.csv
 
-    # Step 8: Upload the HTML to Confluence
+    # Step 6: Download subnets.csv artifact for further processing
+    - name: Download subnets.csv artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: subnets-csv
+
+    # Step 7: Run clean_up_csv_file.py to create cleaned_subnets.csv
+    - name: Run clean_up_csv_file.py to create cleaned_subnets.csv
+      run: |
+        python clean_up_csv_file.py  # Adjust this if the script location is different
+    
+    # Step 8: Upload cleaned_subnets.csv as artifact
+    - name: Upload cleaned_subnets.csv as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: cleaned-subnets-csv
+        path: cleaned_subnets.csv
+
+    # Step 9: Download cleaned_subnets.csv artifact for further processing
+    - name: Download cleaned_subnets.csv artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: cleaned-subnets-csv
+
+    # Step 10: Run csv_to_html_converter.py to create subnets.html
+    - name: Run csv_to_html_converter.py to create subnets.html
+      run: |
+        python csv_to_html_converter.py  # Adjust this if the script location is different
+    
+    # Step 11: Upload subnets.html as artifact
+    - name: Upload subnets.html as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: subnets-html
+        path: subnets.html
+
+    # Step 12: Upload the HTML to Confluence
     - name: Upload HTML to Confluence
       run: |
         python upload_confluence.py  # Ensure this script uploads subnets.html to Confluence
