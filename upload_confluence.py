@@ -22,7 +22,7 @@ with open(html_file, 'r') as file:
 # Prepare the request payload
 data = {
     "type": "page",
-    "title": "New Page Title 1",  # Replace with the title you want for the new page
+    "title": "New Page Title 2",  # Replace with the title you want for the new page
     "space": {
         "key": space_key
     },
