@@ -1,0 +1,2 @@
+VPC ID: vpc-63abcd0a, IPv4 CIDR: 172.31.0.0/16, Region: ap-northeast-3
+VPC ID: vpc-074b93f3dd913c0e1, IPv4 CIDR: 10.151.116.0/23, Region: us-east-1

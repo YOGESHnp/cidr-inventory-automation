@@ -1,0 +1,1 @@
+VPC ID: vpc-efef9586, IPv4 CIDR: 172.31.0.0/16, Region: ap-south-1

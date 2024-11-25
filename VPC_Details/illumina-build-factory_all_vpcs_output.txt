@@ -1,0 +1,2 @@
+VPC ID: vpc-a5b657cc, IPv4 CIDR: 172.31.0.0/16, Region: ap-south-1
+VPC ID: vpc-56ad403f, IPv4 CIDR: 172.31.0.0/16, Region: eu-north-1
