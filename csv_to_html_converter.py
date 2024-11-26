@@ -4,6 +4,9 @@ import pandas as pd
 csv_file = 'cleaned_subnets.csv'  # Replace with your CSV file path
 df = pd.read_csv(csv_file)
 
+# Replace NaN values with empty strings
+df = df.fillna('')
+
 # Convert the DataFrame to an HTML string
 html_output = df.to_html(index=False, escape=False, border=1)
 
